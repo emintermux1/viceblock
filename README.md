@@ -6,30 +6,39 @@ Guest first. Wallet is optional identity only. No contract address. No token. No
 
 ## How to run
 
-From this folder: install dependencies. Start the Vite dev server on port 5174. Create a production bundle with the build script. Do not deploy this slice.
+```bash
+npm install
+npm run dev
+```
 
-Desktop: WASD walk. Shift sprint. Space jump. Click or Ctrl shoot. Hold F or B to jack. E talk or start race. 1-2 weapons. Esc pause.
+Dev server is Vite on port 5174. Production bundle:
 
-Phone: left stick. A shoot. B hold to jack. JUMP. BRAKE in a car.
+```bash
+npm run build
+```
+
+Desktop: WASD walk. Shift sprint. Space jump. Mouse or Ctrl shoot (aim with the cursor). Hold F or B to jack. E talk or start the ghost race. 1-2 weapons. Esc pause. R / tap NOVA FM for radio.
+
+Phone: left stick. A shoot. B hold to jack. JUMP on foot. BRAKE in a car. SPR sprint. Joystick clears on lift. Page zoom is blocked.
 
 ## Real (this slice)
 
-- One dense Southside map (96x96), Canvas2D about 60fps
-- Title VICEBLOCK / Nova City then ANSEM / ORANGIE / CUPSEY then apartment with 500 cash
-- Rico talk, yellow blip, jack the compact, drive to Maya garage
-- Hold F to rob 6ix Mart, easy heat (1 car + 1 foot, 4s LOS drop), escape to garage
-- Optional ghost race at the start line
-- Walk, sprint, jump, swim, jack parked + traffic, shoot, cars explode at 0 HP
-- HUD: cash, stars, health, weapon, objective
-- Joystick clears on pointerup, cancel, blur
-- public/audio/nova-fm.mp3 loops via HTMLAudio on PLAY
+- One dense 96x96 Southside: dusk facades, lit windows, alleys, docks, mart, Maya garage, walk-up, NCPD, Neon Room, street decals
+- Traffic loops, parked cars, peds, waterfront boats. Wrecks respawn so the street stays busy
+- Title VICEBLOCK / Nova City → ANSEM / ORANGIE / CUPSEY → apartment start with 500 cash
+- Mission chain: Rico alley → jack the yellow compact → Maya drop → 6ix Mart (or dock crate on later nights) → garage cool-off. Talk Rico again to loop it
+- Optional ghost race on Block Ave
+- Wanted 1-5: cops spawn, chase, cut you off, and shoot from 3 stars. Stars drop one at a time when you break line of sight, faster in Maya's bay
+- Cars explode and can chain. Drive-by, swim, jump, sprint
+- HUD: cash, stars, health, weapon, yellow objective + on-screen arrow
+- NOVA FM: `public/audio/nova-fm.mp3` loops on PLAY / TAP FOR MUSIC. If the file is missing, a dusk pad synth starts instead. Gun, jack, siren, crash, explode are synthesized SFX
 
 ## Unfinished / not faked
 
-- No multiplayer
-- No NFT marketplace
+- No multiplayer, no fake online counts
+- No NFT marketplace, no token, no shop, no contract address
 - No 8 districts (one Southside map)
-- No 30-mission campaign
+- No 30-mission campaign (one replayable 5-beat night)
 - No crews or seasons
 - No admin dashboard
-- No token rewards or payouts
+- Licensed music is not in this repo — NOVA FM is an original loop

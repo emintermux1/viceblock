@@ -79,7 +79,7 @@ for i in range(N):
     out += struct.pack("<hh", int(l * 30000), int(r * 30000))
 
 wav = "/tmp/nova-fm.wav"
-mp3 = "/workspace/viceblock/public/audio/nova-fm.mp3"
+mp3 = os.path.join(os.path.dirname(__file__), "..", "public", "audio", "nova-fm.mp3")
 with open(wav, "wb") as f:
     datasz = len(out)
     f.write(struct.pack("<4sI4s4sIHHIIHH4sI", b"RIFF", 36 + datasz, b"WAVE", b"fmt ", 16, 1, 2, SR, SR * 4, 4, 16, b"data", datasz))

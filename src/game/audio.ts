@@ -24,6 +24,9 @@ function noiseBuf(ctx: AudioContext, sec: number, brown = false) {
 export class Radio {
   el: HTMLAudioElement | null = null;
   started = false;
+  private synthOn = false;
+  private synthMaster: GainNode | null = null;
+  private synthOsc: OscillatorNode[] = [];
 
   ensure() {
     if (this.el) return this.el;
@@ -31,24 +34,67 @@ export class Radio {
     a.loop = true;
     a.preload = "auto";
     a.volume = 0.38;
+    a.addEventListener("error", () => this.startSynth());
     this.el = a;
     return a;
   }
 
   play() {
+    gestureUnlock();
     const a = this.ensure();
     a.currentTime = a.currentTime || 0;
     const p = a.play();
-    if (p) void p.then(() => { this.started = true; }).catch(() => { this.started = false; });
-    else this.started = true;
+    if (p) {
+      void p.then(() => { this.started = true; }).catch(() => this.startSynth());
+    } else this.started = true;
+  }
+
+  private startSynth() {
+    if (this.synthOn) { this.started = true; return; }
+    try {
+      gestureUnlock();
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!sharedCtx) sharedCtx = new Ctx();
+      if (sharedCtx.state === "suspended") void sharedCtx.resume();
+      const ctx = sharedCtx;
+      const master = ctx.createGain();
+      master.gain.value = this.el?.muted ? 0 : 0.12;
+      master.connect(ctx.destination);
+      this.synthMaster = master;
+      const pad = [220, 261.63, 329.63];
+      for (const f of pad) {
+        const o = ctx.createOscillator();
+        o.type = "sine";
+        o.frequency.value = f;
+        const g = ctx.createGain();
+        g.gain.value = 0.18;
+        o.connect(g); g.connect(master);
+        o.start();
+        this.synthOsc.push(o);
+      }
+      const bass = ctx.createOscillator();
+      bass.type = "triangle";
+      bass.frequency.value = 55;
+      const bg = ctx.createGain();
+      bg.gain.value = 0.16;
+      bass.connect(bg); bg.connect(master);
+      bass.start();
+      this.synthOsc.push(bass);
+      this.synthOn = true;
+      this.started = true;
+    } catch {
+      this.started = false;
+    }
   }
 
   setMuted(m: boolean) {
     if (this.el) this.el.muted = m;
+    if (this.synthMaster) this.synthMaster.gain.value = m ? 0 : 0.12;
   }
 
   isLive() {
-    return !!this.el && !this.el.paused && !this.el.muted && this.started;
+    if (this.el && !this.el.paused && !this.el.muted && this.started) return true;
+    return this.synthOn && this.started && !this.el?.muted;
   }
 }
 
@@ -137,6 +183,31 @@ export class Sfx {
   crash() { this.burst(0.14, 0.32, 60, 500, true); }
   splash() { this.burst(0.16, 0.22, 200, 1400); }
   star() { this.tone(311, 0.07, "triangle", 0.1); }
+
+  private sirenOsc: OscillatorNode | null = null;
+  private sirenG: GainNode | null = null;
+  private sirenLfo: OscillatorNode | null = null;
+
+  siren(on: boolean) {
+    const ctx = this.ensure();
+    const out = this.busN;
+    if (!ctx || !out) return;
+    if (!on || this.muted) {
+      if (this.sirenG) this.sirenG.gain.setTargetAtTime(0, ctx.currentTime, 0.08);
+      return;
+    }
+    if (!this.sirenOsc) {
+      const o = ctx.createOscillator(); o.type = "square"; o.frequency.value = 680;
+      const lfo = ctx.createOscillator(); lfo.type = "square"; lfo.frequency.value = 1.6;
+      const lfoG = ctx.createGain(); lfoG.gain.value = 90;
+      const g = ctx.createGain(); g.gain.value = 0;
+      lfo.connect(lfoG); lfoG.connect(o.frequency);
+      o.connect(g); g.connect(out);
+      o.start(); lfo.start();
+      this.sirenOsc = o; this.sirenG = g; this.sirenLfo = lfo;
+    }
+    this.sirenG?.gain.setTargetAtTime(0.035, ctx.currentTime, 0.12);
+  }
 
   engine(speed: number, driving: boolean) {
     const ctx = this.ensure();

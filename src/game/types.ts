@@ -3,6 +3,9 @@ export type PedState = "wander" | "flee" | "down";
 export type WeaponId = "fists" | "pistol";
 export type CharacterId = "ansem" | "orangie" | "cupsey";
 export type MissionId = "talk" | "jack" | "maya" | "rob" | "escape" | "free";
+export type BulletTeam = "player" | "cop";
+export type PropKind = "dumpster" | "crate" | "hydrant" | "bench" | "billboard" | "cone" | "barrel" | "stall" | "pier";
+export type BuildingKind = "apt" | "shop" | "warehouse" | "office" | "garage" | "pd" | "mart" | "gas" | "club";
 
 export type HudState = {
   cash: number;

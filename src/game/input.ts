@@ -55,6 +55,9 @@ export class Input {
   private didCapture = false;
 
   showTouch = false;
+  aimSX = 0.5;
+  aimSY = 0.5;
+  hasAim = false;
 
   private keys = new Set<string>();
   private prev = new Set<string>();
@@ -101,6 +104,7 @@ export class Input {
     el.addEventListener("mousedown", this.onMouseDown);
     el.addEventListener("mouseup", this.onMouseUp);
     el.addEventListener("pointerdown", this.onCanvasPointerDown);
+    el.addEventListener("pointermove", this.onCanvasPointerMove);
     el.addEventListener("pointerup", this.onCanvasPointerUp);
     el.addEventListener("pointercancel", this.onCanvasPointerUp);
   }
@@ -111,6 +115,7 @@ export class Input {
     el.removeEventListener("mousedown", this.onMouseDown);
     el.removeEventListener("mouseup", this.onMouseUp);
     el.removeEventListener("pointerdown", this.onCanvasPointerDown);
+    el.removeEventListener("pointermove", this.onCanvasPointerMove);
     el.removeEventListener("pointerup", this.onCanvasPointerUp);
     el.removeEventListener("pointercancel", this.onCanvasPointerUp);
     this.canvasEl = null;
@@ -149,7 +154,8 @@ export class Input {
   };
 
   private onMouseDown = (e: MouseEvent) => {
-    if (e.button === 0) {
+    if (e.button !== 0) return;
+    if (this.canvasEl && e.target === this.canvasEl) {
       this.mouseHeld = true;
       this.mouseLatch = true;
     }
@@ -162,10 +168,21 @@ export class Input {
   onCanvasPointerDown = (e: PointerEvent) => {
     e.preventDefault();
     this.livePointers.add(e.pointerId);
-    if (e.button === 0 || e.pointerType !== "mouse") {
+    if (e.pointerType === "mouse" && e.button === 0) {
       this.mouseHeld = true;
       this.mouseLatch = true;
     }
+  };
+
+  onCanvasPointerMove = (e: PointerEvent) => {
+    if (e.pointerType !== "mouse") return;
+    const el = this.canvasEl;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) return;
+    this.aimSX = (e.clientX - r.left) / r.width;
+    this.aimSY = (e.clientY - r.top) / r.height;
+    this.hasAim = true;
   };
 
   onCanvasPointerUp = (e: PointerEvent) => {
