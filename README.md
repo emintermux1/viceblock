@@ -17,9 +17,9 @@ Dev server is Vite on port 5174. Production bundle:
 npm run build
 ```
 
-Desktop: WASD walk. Shift sprint. Space jump. Mouse or Ctrl shoot (aim with the cursor). Hold F or B to jack. E talk or start the ghost race. 1-2 weapons. Esc pause. R / tap NOVA FM for radio.
+Desktop: WASD walk. Shift sprint. Space jump. Click or Ctrl shoot (aim with the cursor). Hold F to jack. E talk or start the ghost race. 1-2 weapons. Esc pause. R / tap NOVA FM for radio.
 
-Phone: left stick. A shoot. B hold to jack. JUMP on foot. BRAKE in a car. SPR sprint. Joystick clears on lift. Page zoom is blocked.
+Phone: left stick. ATEŞ shoot. Hold BİN to jack. ZIPLA on foot. FREN in a car. KOŞ sprint. Joystick clears on lift. Page zoom is blocked. No extra get-in-car HUD button.
 
 ## Real (this slice)
 
@@ -28,7 +28,7 @@ Phone: left stick. A shoot. B hold to jack. JUMP on foot. BRAKE in a car. SPR sp
 - Title VICEBLOCK / Nova City → ANSEM / ORANGIE / CUPSEY → apartment start with 500 cash
 - Mission chain: Rico alley → jack the yellow compact → Maya drop → 6ix Mart (or dock crate on later nights) → garage cool-off. Talk Rico again to loop it
 - Optional ghost race on Block Ave
-- Wanted 1-5: cops spawn, chase, cut you off, and shoot from 3 stars. Stars drop one at a time when you break line of sight, faster in Maya's bay
+- Wanted 1-5 is light GTA-Advance heat: one car from NCPD at 1-2 stars, a second unit later. Cops are slower than your ride. They shoot only at 4+. Stars drop fast when you break LOS or sit in Maya's bay
 - Cars explode and can chain. Drive-by, swim, jump, sprint
 - HUD: cash, stars, health, weapon, yellow objective + on-screen arrow
 - NOVA FM: `public/audio/nova-fm.mp3` loops on PLAY / TAP FOR MUSIC. If the file is missing, a dusk pad synth starts instead. Gun, jack, siren, crash, explode are synthesized SFX
