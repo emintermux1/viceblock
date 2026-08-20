@@ -49,6 +49,8 @@ export function GameCanvas({ input, frozen, muted, character, onHud, engineRef }
       const dt = Math.min(0.033, (now - last) / 1000);
       last = now;
       game.frozen = frozenRef.current;
+      game.viewW = canvas.width;
+      game.viewH = canvas.height;
       game.update(dt);
       const ctx = canvas.getContext("2d");
       if (ctx) game.render(ctx, canvas.width, canvas.height);

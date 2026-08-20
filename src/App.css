@@ -71,15 +71,15 @@
 .hud-stars { margin-top: 4px; letter-spacing: 2px; }
 .star { color: #3a3428; font-size: 14px; }
 .star.on { color: #ffc83d; }
-.hud-bars { position: absolute; left: calc(14px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); width: min(180px, 38vw); height: 8px; background: #1a1814; }
+.hud-bars { position: absolute; left: calc(14px + env(safe-area-inset-left)); top: calc(52px + env(safe-area-inset-top)); width: min(160px, 36vw); height: 8px; background: #1a1814; }
 .bar { display: block; height: 100%; }
 .bar.health { background: #2ef2d0; }
 .hud-prompt, .hud-sub, .hud-job {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .hud-prompt {
-  position: absolute; left: 50%; bottom: calc(72px + env(safe-area-inset-bottom)); transform: translateX(-50%);
-  max-width: 80vw; padding: 6px 12px; background: rgba(6,16,20,0.7); color: #ffc83d; letter-spacing: 0.12em; font-size: 13px;
+  position: absolute; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  max-width: 70vw; padding: 6px 12px; background: rgba(6,16,20,0.7); color: #ffc83d; letter-spacing: 0.12em; font-size: 13px;
 }
 .hud-sub {
   position: absolute; left: 50%; top: calc(18px + env(safe-area-inset-top)); transform: translateX(-50%);
@@ -101,8 +101,8 @@
 .pause-card button.ghost { background: transparent; color: #8a8070; }
 
 .touch-layer { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
-.touch-left { position: absolute; left: 0; bottom: 0; width: 46%; height: 46%; pointer-events: auto; }
-.touch-right { position: absolute; right: calc(10px + env(safe-area-inset-right)); bottom: calc(12px + env(safe-area-inset-bottom)); width: 180px; height: 180px; pointer-events: auto; }
+.touch-left { position: absolute; left: 0; bottom: 0; width: 42%; height: 42%; pointer-events: auto; }
+.touch-right { position: absolute; right: calc(10px + env(safe-area-inset-right)); bottom: calc(12px + env(safe-area-inset-bottom)); width: 168px; height: 196px; pointer-events: auto; }
 .stick-base, .stick-knob { position: fixed; width: 112px; height: 112px; margin: -56px 0 0 -56px; border-radius: 50%; pointer-events: none; }
 .stick-base { background: rgba(232,224,200,0.12); border: 2px solid rgba(232,224,200,0.25); }
 .stick-knob { width: 48px; height: 48px; margin: -24px 0 0 -24px; background: rgba(255,200,61,0.85); }
@@ -110,10 +110,10 @@
   position: absolute; width: 54px; height: 54px; border: 0; border-radius: 50%; background: rgba(232,224,200,0.16); color: #e8e0c8;
   font-size: 11px; font-weight: 700; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.pad-a { right: 8px; bottom: 58px; background: rgba(255,200,61,0.85); color: #14110a; }
-.pad-b { right: 68px; bottom: 18px; }
-.pad-jump { right: 8px; bottom: 122px; }
-.pad-brake { right: 8px; bottom: 122px; }
-.pad-sprint { right: 68px; bottom: 82px; }
-.pad-phone { right: 128px; bottom: 122px; width: 40px; height: 40px; }
+.pad-a { right: 6px; bottom: 64px; background: rgba(255,200,61,0.85); color: #14110a; }
+.pad-b { right: 72px; bottom: 16px; }
+.pad-jump { right: 6px; bottom: 132px; }
+.pad-brake { right: 6px; bottom: 132px; }
+.pad-sprint { right: 72px; bottom: 84px; }
+.pad-phone { right: 128px; bottom: 142px; width: 36px; height: 36px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }

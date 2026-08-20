@@ -61,8 +61,8 @@ export function TouchControls({ input, hidden, inCar, onPause }: Props) {
         <button type="button" className="pad-btn pad-sprint" data-hit="sprint">SPR</button>
         {!inCar && <button type="button" className="pad-btn pad-jump" data-hit="jump">JUMP</button>}
         {inCar && <button type="button" className="pad-btn pad-brake" data-hit="brake">BRAKE</button>}
-        <button type="button" className="pad-btn pad-a" data-hit="a">A</button>
-        <button type="button" className="pad-btn pad-b" data-hit="b">B</button>
+        <button type="button" className="pad-btn pad-a" data-hit="a" aria-label="Shoot">A</button>
+        <button type="button" className="pad-btn pad-b" data-hit="b" aria-label="Jack">B</button>
       </div>
     </div>
   );

@@ -173,8 +173,14 @@ export function drawCar(
   }
   if (kind === "cop") {
     ctx.fillStyle = "#e8eef8"; ctx.fillRect(-w / 2, -3, w, 5);
-    ctx.fillStyle = "#c42a44"; ctx.fillRect(-3, -h / 2 + 2, 3, 2);
-    ctx.fillStyle = "#2a6cff"; ctx.fillRect(0, -h / 2 + 2, 3, 2);
+    ctx.fillStyle = lights ? "#c42a44" : "#6a1824"; ctx.fillRect(-3, -h / 2 + 2, 3, 2);
+    ctx.fillStyle = lights ? "#2a6cff" : "#142848"; ctx.fillRect(0, -h / 2 + 2, 3, 2);
+    if (lights) {
+      ctx.globalAlpha = 0.35;
+      ctx.fillStyle = "#c42a44"; ctx.beginPath(); ctx.ellipse(-6, 0, 10, 6, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#2a6cff"; ctx.beginPath(); ctx.ellipse(6, 0, 10, 6, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
   }
   ctx.fillStyle = lights ? "#fff6c8" : "#d8c878";
   ctx.fillRect(-w / 2 + 1, -h / 2, 3, 2); ctx.fillRect(w / 2 - 4, -h / 2, 3, 2);
@@ -282,6 +288,111 @@ export function drawHoop(ctx: CanvasRenderingContext2D, x: number, y: number) {
   ctx.fillStyle = "#2a2420"; ctx.fillRect(-1, -14, 2, 14);
   ctx.strokeStyle = "#ffc83d"; ctx.lineWidth = 1.4;
   ctx.beginPath(); ctx.arc(0, -14, 4, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+}
+
+export function drawDumpster(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "rgba(0,0,0,0.3)";
+  ctx.fillRect(x - 5, y - 1, 12, 6);
+  ctx.fillStyle = "#2a4a38";
+  ctx.fillRect(x - 6, y - 5, 12, 8);
+  ctx.fillStyle = "#1a3028";
+  ctx.fillRect(x - 6, y - 6, 12, 2);
+  ctx.fillStyle = "#3a5a44";
+  ctx.fillRect(x - 4, y - 3, 3, 2);
+}
+
+export function drawCrate(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#6a4a28";
+  ctx.fillRect(x - 4, y - 4, 8, 8);
+  ctx.fillStyle = "#8a6a38";
+  ctx.fillRect(x - 4, y - 4, 8, 2);
+  ctx.fillStyle = "rgba(0,0,0,0.25)";
+  ctx.fillRect(x - 3, y - 1, 6, 1);
+}
+
+export function drawHydrant(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#c42a44";
+  ctx.fillRect(x - 2, y - 6, 4, 7);
+  ctx.fillRect(x - 3, y - 3, 6, 2);
+  ctx.fillStyle = "#8a2030";
+  ctx.fillRect(x - 2, y + 1, 4, 2);
+}
+
+export function drawBench(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#3a2a18";
+  ctx.fillRect(x - 8, y - 2, 16, 3);
+  ctx.fillStyle = "#2a1c10";
+  ctx.fillRect(x - 7, y + 1, 2, 3);
+  ctx.fillRect(x + 5, y + 1, 2, 3);
+}
+
+export function drawBillboard(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#1a1814";
+  ctx.fillRect(x - 1, y - 4, 2, 10);
+  ctx.fillStyle = "#0c1618";
+  ctx.fillRect(x - 10, y - 16, 20, 12);
+  ctx.fillStyle = "#ffc83d";
+  ctx.fillRect(x - 8, y - 14, 16, 3);
+  ctx.fillStyle = "#2ef2d0";
+  ctx.fillRect(x - 8, y - 10, 10, 3);
+}
+
+export function drawCone(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#c46a20";
+  ctx.beginPath();
+  ctx.moveTo(x, y - 7);
+  ctx.lineTo(x + 4, y + 2);
+  ctx.lineTo(x - 4, y + 2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#e8e0c8";
+  ctx.fillRect(x - 2, y - 2, 4, 2);
+}
+
+export function drawBarrel(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#3a4a38";
+  ctx.fillRect(x - 3, y - 5, 6, 9);
+  ctx.fillStyle = "#2a3028";
+  ctx.fillRect(x - 3, y - 2, 6, 2);
+}
+
+export function drawStall(ctx: CanvasRenderingContext2D, x: number, y: number) {
+  ctx.fillStyle = "#6a3020";
+  ctx.fillRect(x - 7, y - 2, 14, 6);
+  ctx.fillStyle = "#ffc83d";
+  ctx.fillRect(x - 8, y - 6, 16, 4);
+}
+
+export function drawBoat(ctx: CanvasRenderingContext2D, x: number, y: number, heading: number) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(heading);
+  ctx.fillStyle = "#1a2428";
+  ctx.beginPath();
+  ctx.moveTo(10, 0);
+  ctx.lineTo(-8, 5);
+  ctx.lineTo(-8, -5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#2ef2d0";
+  ctx.globalAlpha = 0.35;
+  ctx.fillRect(-4, -2, 6, 4);
+  ctx.restore();
+}
+
+export function drawObjectiveArrow(ctx: CanvasRenderingContext2D, x: number, y: number, ang: number, pulse: number) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(ang);
+  ctx.fillStyle = "#ffc83d";
+  ctx.globalAlpha = 0.85 + pulse * 0.15;
+  ctx.beginPath();
+  ctx.moveTo(14, 0);
+  ctx.lineTo(6, 4);
+  ctx.lineTo(6, -4);
+  ctx.closePath();
+  ctx.fill();
   ctx.restore();
 }
 

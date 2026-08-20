@@ -6,16 +6,19 @@ export const MAP_H = 96;
 export const WORLD_W = MAP_W * TILE;
 export const WORLD_H = MAP_H * TILE;
 
-export const ZOOM_FOOT = 2.25;
-export const ZOOM_CAR = 1.42;
+export const ZOOM_FOOT = 1.92;
+export const ZOOM_CAR = 1.26;
+export const CAM_LOOK_FOOT = 28;
+export const CAM_LOOK_CAR = 64;
+export const CAM_FOLLOW = 7.2;
 
 export const STICK_RADIUS = 56;
 export const STICK_DEAD = 16;
 
 export const WALK_SPEED = 78;
 export const SPRINT_SPEED = 142;
-export const PED_SPEED = 34;
-export const FLEE_SPEED = 86;
+export const PED_SPEED = 38;
+export const FLEE_SPEED = 96;
 export const SWIM_SPEED = 42;
 
 export const ENTER_LOCK = 0.2;
@@ -28,19 +31,25 @@ export const JUMP_VEL = 168;
 export const JUMP_GRAV = 520;
 
 export const STAR_MAX = 5;
-export const LOS_FORGET = 4;
-export const BUST_HOLD = 1.8;
+export const STAR_COOL = 7.2;
+export const GARAGE_COOL = 0.85;
+export const BUST_HOLD = 1.6;
 export const BUST_RANGE = 12;
-export const COP_FOOT_SPEED = 40;
-export const COP_CAR_MAX = 88;
+export const COP_FOOT_SPEED = 96;
+export const COP_CAR_MAX = 218;
+export const COP_FIRE_RANGE = 150;
+export const COP_FIRE_CD = 1.05;
 export const REGEN_DELAY = 4;
 export const REGEN_RATE = 5;
 export const CAR_HP = 100;
 
 export const BODY_LIFE = 16;
-export const BULLET_SPEED = 300;
+export const BULLET_SPEED = 320;
 export const BULLET_LIFE = 0.42;
 export const HIT_RADIUS = 10;
+export const TRAFFIC_TARGET = 22;
+export const PED_TARGET = 40;
+export const FX_CAP = 90;
 
 export const WEAPON = {
   fists: { name: "FISTS", dmg: 28, rate: 2.6, ammo: 0 },
@@ -137,5 +146,14 @@ export const CAR_STATS: Record<string, { accel: number; max: number; brake: numb
   hatch: { accel: 185, max: 198, brake: 290, rev: 75, steer: 3.6, grip: 3.3, w: 11, h: 20 },
   compact: { accel: 190, max: 196, brake: 300, rev: 76, steer: 3.55, grip: 3.25, w: 11, h: 20 },
   muscle: { accel: 210, max: 236, brake: 270, rev: 72, steer: 2.85, grip: 2.45, w: 13, h: 24 },
-  cop: { accel: 160, max: 88, brake: 300, rev: 70, steer: 3.2, grip: 3.1, w: 12, h: 22 },
+  cop: { accel: 195, max: 218, brake: 310, rev: 74, steer: 3.45, grip: 3.2, w: 12, h: 22 },
 };
+
+export function copQuota(stars: number): { foot: number; cars: number } {
+  if (stars <= 0) return { foot: 0, cars: 0 };
+  if (stars === 1) return { foot: 1, cars: 1 };
+  if (stars === 2) return { foot: 2, cars: 2 };
+  if (stars === 3) return { foot: 3, cars: 3 };
+  if (stars === 4) return { foot: 4, cars: 3 };
+  return { foot: 5, cars: 4 };
+}
