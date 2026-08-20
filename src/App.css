@@ -1,0 +1,119 @@
+.app { position: relative; width: 100%; height: 100%; overflow: hidden; background: #061820; }
+.stage { position: absolute; inset: 0; }
+.pixel-canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; }
+
+.title-scr, .select-scr { position: absolute; inset: 0; z-index: 20; }
+.title-bg { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.title-fg, .select-fg {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: calc(24px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(6, 16, 20, 0.74) 0%, transparent 48%);
+}
+.title-kicker, .select-kicker {
+  margin: 0 0 10px; letter-spacing: 0.36em; font-size: 11px; color: #c9b87a; text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92vw;
+}
+.title-fg h1, .select-fg h2 {
+  margin: 0; font-family: "Oswald", "Chakra Petch", sans-serif; font-size: clamp(36px, 8vw, 72px); font-weight: 700;
+  color: #f4ead4; letter-spacing: 0.1em; text-shadow: 3px 3px 0 #061018;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92vw;
+}
+.title-sub {
+  margin: 10px 0 28px; color: #2ef2d0; letter-spacing: 0.28em; font-size: 13px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90vw;
+}
+.title-play {
+  appearance: none; border: 0; min-width: 220px; padding: 16px 36px; background: #ffc83d; color: #14110a;
+  font-family: "Chakra Petch", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.18em; cursor: pointer;
+}
+.title-play:hover, .title-play:focus-visible { background: #ffe08a; }
+.title-wallet { margin-top: 18px; }
+.title-wallet .wallet-adapter-button {
+  background: transparent !important; color: #8a8070 !important; height: auto !important; padding: 0 !important;
+  font-size: 13px !important; text-decoration: underline; box-shadow: none !important;
+}
+.title-guest {
+  margin-top: 10px; color: #6a6258; font-size: 11px; letter-spacing: 0.08em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90vw;
+}
+.select-grid { display: flex; gap: 14px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
+.char-card {
+  width: 160px; border: 1px solid #2a3a38; background: #0c1618; color: #e8e0c8; padding: 10px 8px 12px; cursor: pointer;
+}
+.char-card b {
+  display: block; margin-top: 6px; letter-spacing: 0.14em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.char-card span {
+  display: block; margin-top: 2px; color: #8a8070; font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.char-card:hover { border-color: #ffc83d; }
+.char-port { width: 140px; height: 160px; display: block; margin: 0 auto; image-rendering: pixelated; }
+.select-hint {
+  margin-top: 18px; color: #6a6258; font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92vw;
+}
+
+.hud { pointer-events: none; position: absolute; inset: 0; z-index: 5; font-family: "Chakra Petch", sans-serif; }
+.hud-tr { position: absolute; top: calc(12px + env(safe-area-inset-top)); right: calc(14px + env(safe-area-inset-right)); text-align: right; max-width: 46vw; }
+.hud-money, .hud-rep, .hud-weapon, .hud-radio-chip {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 46vw;
+}
+.hud-money { font-size: clamp(20px, 4.4vw, 28px); font-weight: 700; color: #ffe566; letter-spacing: 0.04em; text-shadow: 0 1px 0 #041208; }
+.hud-rep, .hud-weapon { margin-top: 1px; font-size: 13px; font-weight: 700; color: #e8e0c8; letter-spacing: 0.12em; }
+.hud-radio-chip {
+  pointer-events: auto; margin-top: 6px; border: 0; background: transparent; color: #c9b87a; font: inherit;
+  font-size: 11px; letter-spacing: 0.14em; padding: 0; cursor: pointer;
+}
+.hud-radio-chip.live { color: #2ef2d0; }
+.hud-radio-chip.tap { color: #ffc83d; }
+.hud-stars { margin-top: 4px; letter-spacing: 2px; }
+.star { color: #3a3428; font-size: 14px; }
+.star.on { color: #ffc83d; }
+.hud-bars { position: absolute; left: calc(14px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); width: min(180px, 38vw); height: 8px; background: #1a1814; }
+.bar { display: block; height: 100%; }
+.bar.health { background: #2ef2d0; }
+.hud-prompt, .hud-sub, .hud-job {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.hud-prompt {
+  position: absolute; left: 50%; bottom: calc(72px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  max-width: 80vw; padding: 6px 12px; background: rgba(6,16,20,0.7); color: #ffc83d; letter-spacing: 0.12em; font-size: 13px;
+}
+.hud-sub {
+  position: absolute; left: 50%; top: calc(18px + env(safe-area-inset-top)); transform: translateX(-50%);
+  max-width: 78vw; color: #e8e0c8; font-size: 14px; text-shadow: 0 1px 0 #041018;
+}
+.hud-job {
+  position: absolute; left: calc(14px + env(safe-area-inset-left)); top: calc(12px + env(safe-area-inset-top)); max-width: 42vw;
+}
+.hud-job b { display: block; color: #ffc83d; letter-spacing: 0.16em; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-job span { display: block; color: #c8bca8; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.pause-scrim { position: absolute; inset: 0; z-index: 30; background: rgba(6,16,20,0.72); display: flex; align-items: center; justify-content: center; }
+.pause-card { width: min(280px, 88vw); background: #0c1618; border: 1px solid #2a3a38; padding: 22px; text-align: center; }
+.pause-card h2 { margin: 0 0 16px; letter-spacing: 0.2em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pause-card button {
+  display: block; width: 100%; margin: 8px 0 0; padding: 10px; border: 0; background: #ffc83d; color: #14110a;
+  font-weight: 700; letter-spacing: 0.08em; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pause-card button.ghost { background: transparent; color: #8a8070; }
+
+.touch-layer { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+.touch-left { position: absolute; left: 0; bottom: 0; width: 46%; height: 46%; pointer-events: auto; }
+.touch-right { position: absolute; right: calc(10px + env(safe-area-inset-right)); bottom: calc(12px + env(safe-area-inset-bottom)); width: 180px; height: 180px; pointer-events: auto; }
+.stick-base, .stick-knob { position: fixed; width: 112px; height: 112px; margin: -56px 0 0 -56px; border-radius: 50%; pointer-events: none; }
+.stick-base { background: rgba(232,224,200,0.12); border: 2px solid rgba(232,224,200,0.25); }
+.stick-knob { width: 48px; height: 48px; margin: -24px 0 0 -24px; background: rgba(255,200,61,0.85); }
+.pad-btn {
+  position: absolute; width: 54px; height: 54px; border: 0; border-radius: 50%; background: rgba(232,224,200,0.16); color: #e8e0c8;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pad-a { right: 8px; bottom: 58px; background: rgba(255,200,61,0.85); color: #14110a; }
+.pad-b { right: 68px; bottom: 18px; }
+.pad-jump { right: 8px; bottom: 122px; }
+.pad-brake { right: 8px; bottom: 122px; }
+.pad-sprint { right: 68px; bottom: 82px; }
+.pad-phone { right: 128px; bottom: 122px; width: 40px; height: 40px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }

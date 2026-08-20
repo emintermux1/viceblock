@@ -1,0 +1,29 @@
+:root {
+  --bg: #061820;
+  --text: #e8e0c8;
+  --dim: #8a8070;
+  --teal: #2ef2d0;
+  --gold: #ffc83d;
+  --navy: #0a3040;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Chakra Petch", "IBM Plex Sans", "Segoe UI", sans-serif;
+  user-select: none;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+button, .wallet-adapter-button { font-family: inherit; }
+#root { position: relative; }
