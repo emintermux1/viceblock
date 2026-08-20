@@ -3,7 +3,7 @@ import { bakeCity, drawDuskWash, drawWaterShimmer } from "./cityart";
 import {
   BODY_LIFE, BULLET_LIFE, BULLET_SPEED, BUST_HOLD, BUST_RANGE, CAM_FOLLOW,
   CAM_LOOK_CAR, CAM_LOOK_FOOT, CAR_HP, CAR_STATS, CHAR, COP_CAR_MAX, COP_FIRE_CD,
-  COP_FIRE_RANGE, COP_FOOT_SPEED, ENTER_LOCK, FLEE_SPEED, FX_CAP, GARAGE_COOL,
+  COP_FIRE_RANGE, COP_FOOT_SPEED, COP_LOS, ENTER_LOCK, FLEE_SPEED, FX_CAP, GARAGE_COOL,
   HIT_RADIUS, JACK_HOLD, JUMP_GRAV, JUMP_VEL, PAL, PED_SPEED, PED_TARGET,
   PUNCH_CD, PUNCH_DMG, PUNCH_RANGE, REGEN_DELAY, REGEN_RATE, STAR_COOL, STAR_MAX,
   SWIM_SPEED, TILE, TRAFFIC_TARGET, WEAPON, WORLD_H, WORLD_W, ZOOM_CAR,
@@ -442,7 +442,6 @@ export class Game {
       life: BULLET_LIFE, dmg: w.dmg, team: "player",
     });
     this.lastCombat = this.time;
-    if (this.mission !== "talk" && this.stars === 0) this.addWanted(1);
   }
 
   private robPoint() {
@@ -502,7 +501,7 @@ export class Game {
       if (dist(c.x, c.y, o.x, o.y) < 16 && Math.abs(c.speed) > 30) {
         o.hp -= 14; c.hp -= 9; c.speed *= 0.65;
         this.pushFx((c.x + o.x) / 2, (c.y + o.y) / 2, 0.25, "dust");
-        if (player && Math.abs(c.speed) > 70) this.addWanted(1);
+        if (player && Math.abs(c.speed) > 120) this.addWanted(1);
         if (o.hp <= 0) this.explodeCar(o);
       }
     }
@@ -546,16 +545,13 @@ export class Game {
       if (this.player.car === c) continue;
       if (c.wrecked) continue;
       if (c.cop && this.stars > 0) {
-        const lead = (this.stars >= 2 ? 70 : 28) + Math.abs(pSpeed) * 0.35;
+        const lead = this.stars >= 4 ? 22 + Math.abs(pSpeed) * 0.1 : 0;
         const tx = p.x + Math.cos(p.facing) * lead;
         const ty = p.y + Math.sin(p.facing) * lead;
-        const cut = this.stars >= 2 ? 1 : 0;
-        const ax = tx + Math.cos(p.facing + Math.PI / 2) * cut * 18;
-        const ay = ty + Math.sin(p.facing + Math.PI / 2) * cut * 18;
-        const ang = Math.atan2(ay - c.y, ax - c.x);
-        c.heading += angWrap(ang - c.heading) * (2.6 + this.stars * 0.15) * dt;
-        const cap = Math.min(COP_CAR_MAX + this.stars * 8, CAR_STATS.cop.max);
-        c.speed = Math.min(cap, c.speed + 130 * dt);
+        const ang = Math.atan2(ty - c.y, tx - c.x);
+        c.heading += angWrap(ang - c.heading) * (1.35 + this.stars * 0.06) * dt;
+        const cap = Math.min(COP_CAR_MAX, CAR_STATS.cop.max);
+        c.speed = Math.min(cap, c.speed + 62 * dt);
         this.drive(c, dt, false);
         continue;
       }
@@ -643,31 +639,36 @@ export class Game {
       this.cars = this.cars.filter((c) => !c.cop || this.player.car === c);
       return;
     }
-    const liveFoot = this.cops.filter((c) => c.state !== "down").length;
-    const liveCars = this.cars.filter((c) => c.cop && !c.wrecked).length;
+    const liveFoot = this.cops.filter((c) => c.state !== "down");
+    if (liveFoot.length > q.foot) {
+      const extra = liveFoot.slice(q.foot);
+      this.cops = this.cops.filter((c) => c.state === "down" || !extra.includes(c));
+    }
+    const liveCars = this.cars.filter((c) => c.cop && !c.wrecked && this.player.car !== c);
+    if (liveCars.length > q.cars) {
+      const extraCars = liveCars.slice(q.cars);
+      this.cars = this.cars.filter((c) => !extraCars.includes(c));
+    }
     const px = this.player.x;
     const py = this.player.y;
-    for (let i = liveFoot; i < q.foot; i++) {
-      const ang = Math.random() * Math.PI * 2;
-      const d = 90 + i * 28;
-      let x = clamp(px + Math.cos(ang) * d, 20, WORLD_W - 20);
-      let y = clamp(py + Math.sin(ang) * d, 20, WORLD_H - 20);
-      if (this.map.isSolidWorld(x, y) || this.map.isWaterWorld(x, y)) { x = LOC.pd.x; y = LOC.pd.y; }
-      this.spawnCopFoot(x, y);
+    const footNow = this.cops.filter((c) => c.state !== "down").length;
+    const carNow = this.cars.filter((c) => c.cop && !c.wrecked).length;
+    const fromPd = dist(px, py, LOC.pd.x, LOC.pd.y) > 90;
+    const sx = fromPd ? LOC.pd.x : LOC.warehouse.x;
+    const sy = fromPd ? LOC.pd.y : LOC.warehouse.y;
+    for (let i = footNow; i < q.foot; i++) {
+      this.spawnCopFoot(sx + (i - footNow) * 10, sy + 8);
     }
-    for (let i = liveCars; i < q.cars; i++) {
-      const ang = (i / Math.max(1, q.cars)) * Math.PI * 2 + this.time;
-      const d = 140 + i * 36;
-      let x = clamp(px + Math.cos(ang) * d, 24, WORLD_W - 24);
-      let y = clamp(py + Math.sin(ang) * d, 24, WORLD_H - 24);
-      if (this.map.isSolidWorld(x, y)) { x = LOC.pd.x + 8; y = LOC.pd.y + 20 + i * 12; }
+    for (let i = carNow; i < q.cars; i++) {
+      const x = sx + 10;
+      const y = sy + 22 + (i - carNow) * 14;
       this.spawnCopCar(x, y, Math.atan2(py - y, px - x));
     }
   }
 
   private hasLos(ax: number, ay: number, bx: number, by: number) {
     const d = dist(ax, ay, bx, by);
-    if (d > 240) return false;
+    if (d > COP_LOS) return false;
     const steps = Math.max(2, Math.floor(d / 12));
     for (let i = 1; i < steps; i++) {
       const t = i / steps;
@@ -688,11 +689,11 @@ export class Game {
       if (see) seen = true;
       const ang = Math.atan2(this.player.y - cop.y, this.player.x - cop.x);
       cop.facing = ang;
-      const spd = COP_FOOT_SPEED + this.stars * 6;
+      const spd = COP_FOOT_SPEED + this.stars * 2;
       cop.vx = Math.cos(ang) * spd; cop.vy = Math.sin(ang) * spd;
       const n = this.moveSolid(cop.x, cop.y, cop.x + cop.vx * dt, cop.y + cop.vy * dt, 5);
       cop.x = n.x; cop.y = n.y; cop.phase += dt * 5;
-      if (see && this.stars >= 3 && cop.fireCd <= 0 && dist(cop.x, cop.y, this.player.x, this.player.y) < COP_FIRE_RANGE) {
+      if (see && this.stars >= 4 && cop.fireCd <= 0 && dist(cop.x, cop.y, this.player.x, this.player.y) < COP_FIRE_RANGE) {
         cop.fireCd = COP_FIRE_CD;
         this.sfx.gunshot();
         this.bullets.push({
@@ -898,11 +899,11 @@ export class Game {
     if (this.raceOn) return { title: "GHOST", hint: "Beat the ghost north on Block Ave" };
     switch (this.mission) {
       case "talk": return { title: "SOUTH SIDE", hint: "Find Rico in the alley. E to talk" };
-      case "jack": return { title: "JACK IT", hint: "Hold F / B on the yellow compact" };
+      case "jack": return { title: "JACK IT", hint: "Hold F on the yellow compact" };
       case "maya": return { title: "MAYA", hint: "Drive the compact to Maya garage" };
       case "rob": return {
         title: this.robKind === "docks" ? "DOCK CRATE" : "6IX MART",
-        hint: this.robKind === "docks" ? "Hold F / B at the docks crate" : "Hold F / B at the mart",
+        hint: this.robKind === "docks" ? "Hold F at the docks crate" : "Hold F at the mart",
       };
       case "escape": return { title: "HEAT", hint: "Lose stars or cool off in Maya's bay" };
       case "free": return { title: "SOUTH SIDE", hint: "Talk Rico for another night. Race is optional" };
@@ -917,13 +918,10 @@ export class Game {
     const h = emptyHud();
     const t = this.titles();
     const b = this.blip();
-    const near = this.nearCar();
     let prompt = "";
     if (this.dialogI < 0 && (this.mission === "talk" || this.mission === "free") && dist(this.player.x, this.player.y, LOC.rico.x, LOC.rico.y) < 22) prompt = "E talk";
-    else if (!this.player.car && near) prompt = "Hold F / B jack";
-    else if (this.player.car) prompt = "F / B exit";
     const robAt = this.robPoint();
-    if (!this.storeRobbed && dist(this.player.x, this.player.y, robAt.x, robAt.y) < 20) prompt = "Hold F / B rob";
+    if (!this.storeRobbed && dist(this.player.x, this.player.y, robAt.x, robAt.y) < 20) prompt = "Hold F";
     if (!this.raceOn && dist(this.player.x, this.player.y, LOC.raceStart.x, LOC.raceStart.y) < 22) prompt = "E race ghost";
     h.cash = this.cash; h.stars = this.stars; h.health = this.player.health; h.maxHealth = this.player.maxHealth;
     h.prompt = prompt; h.subtitle = this.subtitle; h.inCar = !!this.player.car; h.swimming = this.player.swimming;

@@ -31,14 +31,15 @@ export const JUMP_VEL = 168;
 export const JUMP_GRAV = 520;
 
 export const STAR_MAX = 5;
-export const STAR_COOL = 7.2;
-export const GARAGE_COOL = 0.85;
-export const BUST_HOLD = 1.6;
-export const BUST_RANGE = 12;
-export const COP_FOOT_SPEED = 96;
-export const COP_CAR_MAX = 218;
-export const COP_FIRE_RANGE = 150;
-export const COP_FIRE_CD = 1.05;
+export const STAR_COOL = 3.1;
+export const GARAGE_COOL = 0.4;
+export const BUST_HOLD = 2.3;
+export const BUST_RANGE = 11;
+export const COP_FOOT_SPEED = 66;
+export const COP_CAR_MAX = 148;
+export const COP_LOS = 150;
+export const COP_FIRE_RANGE = 120;
+export const COP_FIRE_CD = 1.45;
 export const REGEN_DELAY = 4;
 export const REGEN_RATE = 5;
 export const CAR_HP = 100;
@@ -146,14 +147,14 @@ export const CAR_STATS: Record<string, { accel: number; max: number; brake: numb
   hatch: { accel: 185, max: 198, brake: 290, rev: 75, steer: 3.6, grip: 3.3, w: 11, h: 20 },
   compact: { accel: 190, max: 196, brake: 300, rev: 76, steer: 3.55, grip: 3.25, w: 11, h: 20 },
   muscle: { accel: 210, max: 236, brake: 270, rev: 72, steer: 2.85, grip: 2.45, w: 13, h: 24 },
-  cop: { accel: 195, max: 218, brake: 310, rev: 74, steer: 3.45, grip: 3.2, w: 12, h: 22 },
+  cop: { accel: 118, max: 148, brake: 300, rev: 70, steer: 3.1, grip: 3.0, w: 12, h: 22 },
 };
 
 export function copQuota(stars: number): { foot: number; cars: number } {
   if (stars <= 0) return { foot: 0, cars: 0 };
-  if (stars === 1) return { foot: 1, cars: 1 };
-  if (stars === 2) return { foot: 2, cars: 2 };
-  if (stars === 3) return { foot: 3, cars: 3 };
-  if (stars === 4) return { foot: 4, cars: 3 };
-  return { foot: 5, cars: 4 };
+  if (stars === 1) return { foot: 0, cars: 1 };
+  if (stars === 2) return { foot: 0, cars: 1 };
+  if (stars === 3) return { foot: 1, cars: 1 };
+  if (stars === 4) return { foot: 1, cars: 2 };
+  return { foot: 2, cars: 2 };
 }

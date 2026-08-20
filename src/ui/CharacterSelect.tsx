@@ -15,7 +15,7 @@ export function CharacterSelect({ onPick }: Props) {
         <div className="select-grid">
           {ORDER.map((id) => <CharCard key={id} id={id} onPick={onPick} />)}
         </div>
-        <p className="select-hint">WASD · mouse shoot · SPACE jump · Hold F jack · E talk</p>
+        <p className="select-hint">WASD · click shoot · SPACE jump · Hold F jack · E talk</p>
       </div>
     </div>
   );
